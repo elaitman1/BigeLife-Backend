@@ -1,13 +1,19 @@
 class Api::V1::ArticlesController < ApplicationController
-  before_action :find_article, only: [:show]
+  before_action :find_article, only: [:show, :update]
   # def create
   # end
   #
   # def update
   # end
   #
-  # def edit
-  # end
+  def update
+    @article.update(article_params)
+    if @article.save
+      render json: @article, status: :accepted
+    else
+      render json: { errors: @article.errors.full_messages }, status: :unprocessible_entity
+    end
+  end
   #
   # def destroy
   # end
@@ -24,7 +30,7 @@ class Api::V1::ArticlesController < ApplicationController
   private
 
   def article_params
-    params.permit(:title, :author, :content, :image)
+    params.permit(:title, :author, :content, :image, :tag)
   end
 
   def find_article
