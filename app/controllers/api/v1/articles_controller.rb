@@ -1,7 +1,14 @@
 class Api::V1::ArticlesController < ApplicationController
   before_action :find_article, only: [:show, :update]
-  # def create
-  # end
+
+  def create
+    @article = Article.new(article_params)
+    if @article.save
+      render json: @article, status: :accepted
+    else
+      render json: { errors: @article.errors.full_messages }, status: :unprocessible_entity
+    end
+  end
   #
   # def update
   # end
